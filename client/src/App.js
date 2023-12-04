@@ -7,20 +7,24 @@ import Home from './pages/Home';
 import SPSORoutes from './routes/SPSORoutes';
 import CustomerRoutes from './routes/CustomerRoutes';
 import Login from './pages/Login';
-import { useCookies } from 'react-cookie';
 
 export default function App() {
-  const [user, setUser] = useState({ token: null, isSPSO: true });
+  const [user, setUser] = useState({ token: null, isSPSO: false });
   const [cookies, setCookie] = useCookies();
   
   useEffect(() => {
-    // Log in/out signal
-    // Take user credentials from cookies
-    setUser({...user});
+    const userCredentials = JSON.parse(localStorage.getItem('userCredentials'));
+    
+    if (userCredentials === null || userCredentials === undefined) {
+      setUser({ token: null, isSPSO: false, listFiles: [] });
+    }
+    else {
+      setUser({ ...user, ...userCredentials });
+    }
   }, []);
   
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
         <Header />
         <Routes>

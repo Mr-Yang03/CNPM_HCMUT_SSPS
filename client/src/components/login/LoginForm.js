@@ -1,24 +1,19 @@
 import logo_BK from '../../assets/img/logo_BK.png';
 import { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function LoginForm({ role }) {
-  const url = `http://localhost:8080/api/login/${role}`;
+  const url = `${process.env.REACT_APP_SERVER_URL}/user/login/${role}`;
   const [formValue, setFormValue] = useState({
-    bknetid: "",
+    username: "",
     password: "",
   });
   const [errors, setErrors] = useState([]);
   const [showErrors, setShowErrors] = useState(false);
-  const [setCookie] = useCookies();
-  const navigate = useNavigate();
   
   useEffect(() => {
     let newErrors = [];
-    
-    if (formValue.bknetid === "") {
+    if (formValue.username === "") {
       newErrors.push("Hãy nhập tên tài khoản của bạn.");
     }
     if (formValue.password === "") {
@@ -29,10 +24,10 @@ function LoginForm({ role }) {
   }, [formValue]);
   
   const handleChange = (e) => {
-    setFormValue(formValue => ({
+    setFormValue({
       ...formValue, 
       [e.target.name]: e.target.value
-    }));
+    });
     setShowErrors(false);
   }
   
@@ -44,18 +39,24 @@ function LoginForm({ role }) {
     }
     
     try {
+      const requestedName = role === 'customer' ? 'email' : 'username';
       const validation = await axios.post(url, {
-        bknetid: formValue.bknetid,
+        [requestedName]: formValue.username,
         password: formValue.password
+      }, {
+        withCredentials: true
       });
-      console.log(validation);
-      const d = new Date();
-      setCookie('token', validation.data, { expires: d.getTime() + 3600 * 1000 });
-      navigate('/');
+      localStorage.setItem('userCredentials', JSON.stringify({ token: validation.data.token, isSPSO: role === 'spso' }));
+      window.location.assign('/');
     }
     catch (error) {
-      console.error(error);
-      setErrors([error.response.data]);
+      if (error.response.status >= 400 && error.response.status < 500) {
+        setErrors(['Các thông tin mà bạn cung cấp không đúng.']);
+      }
+      if (error.response.status === 500) {
+        setErrors([error.response.data]);
+      }
+      setShowErrors(true);
     }
   }
   
@@ -73,20 +74,20 @@ function LoginForm({ role }) {
       <h4 className='col-12 fw-bold p-0 mb-0'>Đăng nhập</h4>
       
       {role === 'customer' &&
-      <p className='col-12 '>Sử dụng tài khoản MyBK để đăng nhập</p>
+      <p className='col-12 mt-1'>Sử dụng email HCMUT để đăng nhập</p>
       }
-
+      
       <form 
         className='col-12 text-start'
         onSubmit={handleSubmit}
       >
         <div className="mb-3">
-          <label htmlFor="bknetid" className="form-label fw-bold mb-1">Tên tài khoản</label>
+          <label htmlFor="username" className="form-label fw-bold mb-1">{ role === 'customer' ? 'Email' : 'Tên đăng nhập'}</label>
           <input 
             type="text" 
             className="form-control" 
-            id="bknetid"
-            name="bknetid"
+            id="username"
+            name="username"
             onChange={handleChange}
           />
         </div>
