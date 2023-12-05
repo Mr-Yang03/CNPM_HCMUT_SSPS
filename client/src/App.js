@@ -9,8 +9,7 @@ import CustomerRoutes from './routes/CustomerRoutes';
 import Login from './pages/Login';
 
 export default function App() {
-  const [user, setUser] = useState({ token: null, isSPSO: false });
-  const [cookies, setCookie] = useCookies();
+  const [user, setUser] = useState({ token: null, isSPSO: false, listFiles: [] });
   
   useEffect(() => {
     const userCredentials = JSON.parse(localStorage.getItem('userCredentials'));
