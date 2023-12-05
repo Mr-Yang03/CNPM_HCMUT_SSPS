@@ -1,9 +1,62 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
+import Loading from "../components/utils/Loading.js";
 import ConfigArea from '../components/print_config/ConfigArea';
 import ConfigModal from '../components/print_config/ConfigModal';
+import FilePreview from '../components/print_config/FilePreview.js';
+
+const docs = [
+    {uri: require("../assets/test_docs/GAIN.pdf")},
+    {uri: require("../assets/test_docs/ascii-art.txt")},
+    {uri: require("../assets/test_docs/Phú Lâm.csv")}
+];
 
 function PrintConfig(){
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const token = cookies.auth;
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        setLoading(true);
+
+        if (!state) {
+            setTimeout(() => {
+                navigate('/');
+            }, 200);
+        }
+        
+        axios
+          .get(`${process.env.REACT_APP_SERVER_URL}/user`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            }
+          })
+          .then((response) => {
+            setUser(response.data);
+            setTimeout(() => {
+              setLoading(false);
+            }, 200);
+          })
+          .catch((err) => {
+            if (err.response && err.response.status === 401) {
+              if (cookies.auth) {
+                removeCookie('auth', { path: '/' });
+              }
+              setTimeout(() => {
+                navigate('/login');
+              }, 200);
+            } 
+            else {
+              console.error(err);
+            }
+          });
+    }, []);
+
     const { state } = useLocation();
 
     const [modalState, setModalState] = useState(false);
@@ -49,6 +102,8 @@ function PrintConfig(){
         setModalState(true);
     }
 
+    if (loading) return <Loading loading={loading}/>
+
     return (
         <>
         <div 
@@ -68,9 +123,10 @@ function PrintConfig(){
                 <div className="col-12 col-md-6">
                     <div className="row">
                         <div className="col-8 fw-bold fs-5">Xem trước khi in</div>
-                        <div className="col-8">{state.name}</div>
+                        <div className="col-8">{state?state.name:''}</div>
                     </div>
                     <div id = "document-preview">
+                        <FilePreview docs={docs} />
                     </div>
                 </div>
                 <div className="col-12 col-md-6 border-right border-dark">
@@ -78,8 +134,10 @@ function PrintConfig(){
                 </div>
             </div>
         </div>
-        <ConfigModal 
-            file_name= {state.name}
+        <ConfigModal
+            user_id = {user.customer_id}
+            user_balance = {user.balance}
+            file_name= {state?state.name:''}
             file_num_pages = "100"
             file_config = {config} 
             state={modalState}

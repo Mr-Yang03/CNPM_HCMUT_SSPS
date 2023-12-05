@@ -1,5 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import PrintHistory from "../pages/PrintHistory";
+import PrintReport from "../pages/PrintReport";
+import PrintReportDetail from "../pages/PrintReportDetail";
 import NotFound from "../pages/NotFound";
 import PrinterManagement from "../pages/PrinterManagement";
 
@@ -13,6 +15,10 @@ function SPSORoutes() {
       </Route>
       <Route path='printlog'> {/* Route xem lich su in cua nguoi dung */}
         <Route index element={<PrintHistory />} />
+      </Route>
+      <Route path='report'>
+        <Route index element={<PrintReport />} />
+        <Route path=':year&:month' element={<PrintReportDetail />} />
       </Route>
       <Route path='*' element={<NotFound />}/>
     </Routes>

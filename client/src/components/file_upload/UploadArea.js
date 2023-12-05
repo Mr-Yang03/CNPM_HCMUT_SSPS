@@ -1,44 +1,37 @@
-import { useState, useEffect } from 'react';
-import axios from 'react';
 import ProgressiveImage from "react-progressive-graceful-image";
 import upload_button from '../../assets/img/upload_button.png';
 
-function UploadArea({ onUpload }){
+function UploadArea({ id, length, setLength }){
+    const url = `${process.env.REACT_APP_SERVER_URL}/print/getFileContent`;
 
-    const url = `${process.env.REACT_APP_SERVER_URL}/print/uploadTemporaryFile?id=0`;
-
-    const uploadFiles = async (file) => {
-        const formData = new FormData();
+    const uploadFiles = (files) => {
+        const storedFiles = localStorage.getItem('files');
+        let updated_files = [];
     
-        formData.append('file', file);
-     
-        fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('File upload response:', data);
-        })
-        .catch(error => {
-            console.error('Error uploading file:', error);
-        });
+        if (storedFiles !== null) {
+            updated_files = JSON.parse(storedFiles);
+        }
+    
+        const newFiles = files.map(file => file.name);
+        updated_files = updated_files.concat(newFiles);
+
+        setLength(length + newFiles.length);
+    
+        localStorage.setItem('files', JSON.stringify(updated_files));
+        console.log(localStorage.getItem('files'));
     };
     
 
     const handleDrop = (event) => {
         event.preventDefault();
-        const droppedFiles = event.dataTransfer.files[0];
-        uploadFiles(droppedFiles);
+        const droppedFiles = event.dataTransfer?.files || [];
+        uploadFiles(Array.from(droppedFiles));
     };
     
     const handleFileUpload = (event) => {
         event.preventDefault();
-        const uploadedFiles = event.target.files[0];
-        uploadFiles(uploadedFiles);
+        const uploadedFiles = event.target?.files || [];
+        uploadFiles(Array.from(uploadedFiles));
     };
     
     
@@ -75,6 +68,7 @@ function UploadArea({ onUpload }){
                 <input
                     id = "fileInput"
                     name="file" type = "file"
+                    multiple={true}
                     style={{ display: 'none' }} 
                     onChange={handleFileUpload}
                 />

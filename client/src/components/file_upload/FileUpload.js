@@ -1,12 +1,11 @@
-
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import ProgressiveImage from "react-progressive-graceful-image";
 import '../../assets/styles/FileUpload.css';
 import fileupload_bg from '../../assets/img/fileupload_bg.jpg';
 import FileCards from './FileCard';
 import UploadArea from './UploadArea';
 
-function FileUpload() {
+function FileUpload({ id }) {
     const bg = {
         backgroundImage: `url(${fileupload_bg})`,
         height: 'auto',
@@ -14,19 +13,16 @@ function FileUpload() {
         backgroundSize: 'contain',
     };
 
+    const [length, setLength ] = useState(0);
     const [files, setFiles] = useState(["text.txt"]);
 
-    // useEffect(() => {
-    //     const storedFiles = sessionStorage.getItem("files");
-    //     if (!storedFiles) {
-    //         setFiles(JSON.parse(storedFiles));
-    //     }
-    // }, []);
-
-    const handleUpload = (uploadedFiles) => {
-        setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
-        sessionStorage.setItem("files", JSON.stringify([...files, ...uploadedFiles]));
-    };
+    useEffect(() => {
+        const storedFiles = localStorage.getItem("files");
+        if (storedFiles) {
+            setFiles(JSON.parse(storedFiles));
+            setLength(JSON.parse(storedFiles).length);
+        }
+    }, [length]);
 
     return (
         <div 
@@ -72,7 +68,7 @@ function FileUpload() {
                     className="row d-flex justify-content-center" 
                     style={{ height: '70%' }}
                 >
-                    <UploadArea onUpload={handleUpload}/>
+                    <UploadArea id={id} length={length} setLength = {setLength} />
                     <div 
                         className={`col-5 ${files.length === 0 ? 'd-none': ''}`} 
                         id="list-files"

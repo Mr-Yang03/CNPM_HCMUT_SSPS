@@ -1,17 +1,25 @@
 import LoginRole from "../components/login/LoginRole";
 import LoginForm from "../components/login/LoginForm";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 function Login({ role }) {
   const { user } = useContext(UserContext);
+  const [cookies, , ] = useCookies();
   const navigate = useNavigate();
   
   // User already logged in
-  if (user.token !== null) {
-    navigate('/');
-  }
+  useEffect(() => {
+    const token = cookies.auth;
+    if (token) {
+      navigate('/');
+    }
+    else {
+      localStorage.clear();
+    }
+  }, [cookies]);
   
   return (
     <div className='container-sm'>
