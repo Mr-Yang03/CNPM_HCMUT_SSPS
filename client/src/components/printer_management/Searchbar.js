@@ -19,85 +19,83 @@ export default function Searchbar() {
                             <div className="modal fade" id="addPrinterForm" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div className="modal-dialog modal-dialog-centered">
                                     <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h1 className="modal-title fs-5" id="exampleModalLabel">Thông tin máy in</h1>
-                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <div className="container-fluid">
-                                            <div className="row mt-1 mb-1">
-                                                <div className="col-4 mt-2">
-                                                    Tên máy in:
+                                        <div className="modal-header">
+                                            <h1 className="modal-title fs-5" id="exampleModalLabel">Thông tin máy in</h1>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <div className="container-fluid">
+                                                <div className="row mt-1 mb-1">
+                                                    <div className="col-4 mt-2">
+                                                        Tên máy in:
+                                                    </div>
+                                                    <div className="col">
+                                                        <input className="form-control" id="new_printer_name"/>
+                                                    </div>
                                                 </div>
-                                                <div className="col">
-                                                    <input className="form-control"/>
+                                                <div className="row mt-1 mb-1">
+                                                    <div className="col-4 mt-2">
+                                                        Hãng sản xuất:
+                                                    </div>
+                                                    <div className="col">
+                                                        <input className="form-control" id="new_printer_brand"/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="row mt-1 mb-1">
-                                                <div className="col-4 mt-2">
-                                                    Hãng sản xuất:
+                                                <div className="row mt-1 mb-1">
+                                                    <div className="col-4 mt-2">
+                                                        Loại máy in:
+                                                    </div>
+                                                    <div className="col">
+                                                        <input className="form-control" id="new_printer_model"/>
+                                                    </div>
                                                 </div>
-                                                <div className="col">
-                                                    <input className="form-control"/>
+                                                <div className="row mt-1 mb-1">
+                                                    <div className="col-4 mt-2">
+                                                        Mô tả:
+                                                    </div>
+                                                    <div className="col">
+                                                        <textarea className="form-control" id="new_printer_description"/>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="row mt-1 mb-1">
-                                                <div className="col-4 mt-2">
-                                                    Loại máy in:
-                                                </div>
-                                                <div className="col">
-                                                    <input className="form-control"/>
-                                                </div>
-                                            </div>
-                                            <div className="row mt-1 mb-1">
-                                                <div className="col-4 mt-2">
-                                                    Mô tả:
-                                                </div>
-                                                <div className="col">
-                                                    <textarea className="form-control"/>
-                                                </div>
-                                            </div>
-                                            <div className="row mt-1 mb-1">
-                                                <div className="col-2 mt-2">
-                                                    Vị trí:
-                                                </div>
-                                                <div className="col mt-2">
-                                                    <div>
+                                                <div className="row mt-1 mb-1">
+                                                    <div className="col-2 mt-2">
+                                                        Vị trí:
+                                                    </div>
+                                                    <div className="col mt-2">
                                                         Cơ sở: 
                                                         <select name="campus" id="campus" className="form-control">
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
-                                                        </select>    
+                                                        </select>
+                                                    </div>
+                                                    <div className="col mt-2">
+                                                        Tòa: 
+                                                        <input className="form-control" id="new_printer_building"/>
+                                                    </div>
+                                                    <div className="col mt-2">
+                                                        Phòng: 
+                                                        <input className="form-control" id="new_printer_room"/>
                                                     </div>
                                                 </div>
-                                                <div className="col mt-2">
-                                                    Tòa: 
-                                                    <input className="form-control"/>
-                                                </div>
-                                                <div className="col mt-2">
-                                                    Phòng: 
-                                                    <input className="form-control"/>
-                                                </div>
-                                            </div>
-                                            <div className="row mt-1 mb-1">
-                                                <div className="col-4 mt-2">
-                                                    Trạng thái:
-                                                </div>
-                                                <div className="col">
-                                                    <select name="status" id="status" className="form-control">
-                                                        <option value="on">Đang hoạt động</option>
-                                                        <option value="off">Đang tắt</option>
-                                                    </select>
+                                                <div className="row mt-1 mb-1">
+                                                    <div className="col-4 mt-2">
+                                                        Trạng thái:
+                                                    </div>
+                                                    <div className="col">
+                                                        <select name="status" id="status" className="form-control">
+                                                            <option value="on">Đang hoạt động</option>
+                                                            <option value="off">Đang tắt</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                            Hủy
-                                        </button>
-                                        <button type="button" className="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#successAlertModal">Thêm máy in</button>
-                                    </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                                Hủy
+                                            </button>
+                                            <button type="button" className="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#successAlertModal">Thêm máy in</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +129,7 @@ export default function Searchbar() {
                                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                                     </svg>
                                 </button>
-                                <input type="text" className="form-control" placeholder="Tìm kiếm máy in" aria-label="Example text with button addon" aria-describedby="button-addon1" />
+                                <input type="text" className="form-control" placeholder="Tìm kiếm máy in" aria-label="Example text with button addon" aria-describedby="button-addon1" id="search_printer"/>
                             </div>
                         </div>
                     </div>
